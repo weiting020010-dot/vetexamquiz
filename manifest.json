@@ -1,7 +1,7 @@
 {
-  "name": "獸醫病理學 國考題庫",
-  "short_name": "獸醫病理",
-  "description": "獸醫師國考 病理學歷屆題庫（含 Firebase 同步）",
+  "name": "獸醫師國考題庫",
+  "short_name": "獸醫國考",
+  "description": "獸醫師國考六大科目歷屆題庫",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",

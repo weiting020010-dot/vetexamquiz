@@ -1,5 +1,5 @@
-const CACHE = 'vetquiz-v15';
-const PRECACHE = ['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
+const CACHE = 'vetquiz-v16';
+const PRECACHE = ['./','./index.html','./pathology.html','./manifest.json','./icon-192.png','./icon-512.png'];
 
 // 安裝：預先快取核心檔案
 self.addEventListener('install', e => {
