@@ -1,4 +1,4 @@
-const CACHE = 'vetquiz-v16';
+const CACHE = 'vetquiz-v17';
 const PRECACHE = ['./','./index.html','./pathology.html','./manifest.json','./icon-192.png','./icon-512.png'];
 
 // 安裝：預先快取核心檔案
