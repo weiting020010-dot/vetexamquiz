@@ -393,9 +393,9 @@ function showAIModal(qIdx){
     <button onclick="copyAIText()" style="width:100%;padding:9px;background:#22263a;border:1px solid #3d4260;border-radius:8px;color:#e8eaf6;cursor:pointer;margin-bottom:6px;font-size:13px">📋 複製題目文字</button>
     <div id="copy-ok" style="text-align:center;color:#43a867;font-size:12px;min-height:18px;margin-bottom:6px"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:.75rem">
-      <a href="#" onclick="openAIApp('chatgpt://','https://chat.openai.com/'); return false;" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:#10a37f15;border:1px solid #10a37f40;border-radius:8px;color:#10a37f;text-decoration:none;font-size:12px;font-weight:500;cursor:pointer">🤖<span>ChatGPT</span></a>
-      <a href="#" onclick="openAIApp('claude://','https://claude.ai/new'); return false;" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:#d97a2015;border:1px solid #d97a2040;border-radius:8px;color:#d97a20;text-decoration:none;font-size:12px;font-weight:500;cursor:pointer">⚡<span>Claude</span></a>
-      <a href="#" onclick="openAIApp('googlegemini://','https://gemini.google.com/app'); return false;" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:#4285f415;border:1px solid #4285f440;border-radius:8px;color:#4285f4;text-decoration:none;font-size:12px;font-weight:500;cursor:pointer">✨<span>Gemini</span></a>
+      <a href="chatgpt://" target="_blank" onclick="copyAIText()" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:#10a37f15;border:1px solid #10a37f40;border-radius:8px;color:#10a37f;text-decoration:none;font-size:12px;font-weight:500;cursor:pointer">🤖<span>ChatGPT</span></a>
+      <a href="claude://" target="_blank" onclick="copyAIText()" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:#d97a2015;border:1px solid #d97a2040;border-radius:8px;color:#d97a20;text-decoration:none;font-size:12px;font-weight:500;cursor:pointer">⚡<span>Claude</span></a>
+      <a href="googlegemini://" target="_blank" onclick="copyAIText()" style="display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:#4285f415;border:1px solid #4285f440;border-radius:8px;color:#4285f4;text-decoration:none;font-size:12px;font-weight:500;cursor:pointer">✨<span>Gemini</span></a>
     </div>
     <div style="font-size:11px;color:#555d80;text-align:center">點 AI 按鈕後在新分頁貼上即可</div>
   </div>`;
@@ -403,13 +403,6 @@ function showAIModal(qIdx){
   modal._aiText=text;
   modal.onclick=e=>{if(e.target===modal)modal.remove();};
   document.body.appendChild(modal);
-}
-function openAIApp(appScheme,webUrl){
-  copyAIText();
-  const modal=document.getElementById('ai-modal'); if(modal) modal.remove();
-  const t=Date.now();
-  window.location.href=appScheme;
-  setTimeout(()=>{ if(Date.now()-t<1500) window.open(webUrl,'_blank'); },700);
 }
 function copyAIText(){
   const modal=document.getElementById('ai-modal');if(!modal||!modal._aiText)return;
