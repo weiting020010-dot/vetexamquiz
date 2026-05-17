@@ -388,7 +388,7 @@ function showAIModal(qIdx){
       <div style="font-size:14px;font-weight:700;color:#7986cb">🤖 問 AI 獲取更詳細解析</div>
       <button onclick="document.getElementById('ai-modal').remove()" style="background:none;border:none;color:#9096b8;cursor:pointer;font-size:20px;line-height:1">✕</button>
     </div>
-    <div style="font-size:11px;color:#9096b8;margin-bottom:.5rem">以下文字將傳給 AI。點 AI 按鈕時自動複製，開啟網站後貼上（Ctrl+V）：</div>
+    <div style="font-size:11px;color:#9096b8;margin-bottom:.5rem">點下方按鈕叫出分享選單，選 AI App 後文字直接填入輸入框：</div>
     <div id="ai-preview" style="font-size:11px;color:#9096b8;background:#0f1117;border:1px solid #2e3347;border-radius:6px;padding:10px;max-height:130px;overflow-y:auto;white-space:pre-wrap;line-height:1.6;margin-bottom:.75rem"></div>
     <button onclick="copyAIText()" style="width:100%;padding:9px;background:#22263a;border:1px solid #3d4260;border-radius:8px;color:#e8eaf6;cursor:pointer;margin-bottom:6px;font-size:13px">📋 複製題目文字</button>
     <div id="copy-ok" style="text-align:center;color:#43a867;font-size:12px;min-height:18px;margin-bottom:6px"></div>
@@ -403,6 +403,21 @@ function showAIModal(qIdx){
   modal._aiText=text;
   modal.onclick=e=>{if(e.target===modal)modal.remove();};
   document.body.appendChild(modal);
+}
+async function shareToAI(hint){
+  const modal=document.getElementById('ai-modal');
+  if(!modal||!modal._aiText) return;
+  const text=modal._aiText;
+  if(navigator.share){
+    try{
+      modal.remove();
+      await navigator.share({text:text});
+    }catch(e){}
+  } else {
+    try{ await navigator.clipboard.writeText(text); }catch(e){}
+    alert('已複製！請開啟 '+hint+' 貼上');
+    modal.remove();
+  }
 }
 async function copyAndOpen(url){
   const modal=document.getElementById('ai-modal');
