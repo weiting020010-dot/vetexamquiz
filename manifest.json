@@ -1,0 +1,15 @@
+{
+  "name": "獸醫病理學 國考題庫",
+  "short_name": "獸醫病理",
+  "description": "獸醫師國考 病理學歷屆題庫（含 Firebase 同步）",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1117",
+  "theme_color": "#0f1117",
+  "lang": "zh-TW",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
