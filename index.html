@@ -61,12 +61,22 @@ header p{margin-top:8px;font-size:.85rem;color:#94a3b8}
 .badge-ready{background:#1a3a5c;color:#4f8ef7}
 .badge-soon{background:#1e2330;color:#475569;border:1px solid #2d3548}
 footer{text-align:center;margin-top:36px;font-size:.75rem;color:#334155}
+#auth-loading{position:fixed;inset:0;background:#0f1117;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200}
+.spin{width:36px;height:36px;border:3px solid #2d3548;border-top-color:#4f8ef7;border-radius:50%;animation:sp .8s linear infinite;margin-bottom:14px}
+@keyframes sp{to{transform:rotate(360deg)}}
+#auth-loading p{color:#475569;font-size:.85rem}
 </style>
 </head>
 <body>
 
+<!-- 載入中遮蓋（等待 Firebase 確認登入狀態） -->
+<div id="auth-loading">
+  <div class="spin"></div>
+  <p>驗證登入狀態…</p>
+</div>
+
 <!-- 登入畫面 -->
-<div id="login-screen" class="auth-screen">
+<div id="login-screen" class="auth-screen hidden">
   <div class="auth-logo">🐾</div>
   <div class="auth-title">獸醫師國考題庫</div>
   <div class="auth-sub">請登入以繼續</div>
@@ -143,11 +153,11 @@ footer{text-align:center;margin-top:36px;font-size:.75rem;color:#334155}
   </header>
 
   <div class="grid">
-    <a class="card inactive" href="#">
+    <a class="card active" href="./putongbing.html">
       <div class="card-icon">🐾</div>
       <div class="card-name">普通病學</div>
-      <div class="card-count">題庫建置中</div>
-      <span class="badge badge-soon">即將上線</span>
+      <div class="card-count">239 題 · 112–114年</div>
+      <span class="badge badge-ready">可使用</span>
     </a>
 
     <a class="card active" href="./yaoli.html">
@@ -292,8 +302,12 @@ async function register(){
   }
 }
 
-// 初始化：監聽登入狀態
+// 此裝置永久記住登入狀態（LOCAL persistence 為 Firebase 預設值）
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+
+// 初始化：等 Firebase 確認登入狀態後才顯示 UI
 auth.onAuthStateChanged(user=>{
+  document.getElementById('auth-loading').style.display='none';
   setLoginLoading(false);setRegLoading(false);
   if(user){enterApp(user);}
   else{showLogin();}
