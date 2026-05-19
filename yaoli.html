@@ -109,12 +109,13 @@ h1{font-size:21px;font-weight:700;line-height:1.3}
 .btn-clr:hover{color:var(--red);border-color:var(--red-border)}
 .btn-exam{padding:7px 14px;border-radius:var(--rs);border:1px solid rgba(92,107,192,.4);background:rgba(92,107,192,.15);font-size:13px;color:var(--accent2);cursor:pointer;transition:.15s;font-weight:500;white-space:nowrap}
 .btn-exam:hover{background:rgba(92,107,192,.28);color:var(--text);border-color:var(--accent)}
-.btn-unsure{background:rgba(240,192,96,.08);border-color:rgba(240,192,96,.25);color:var(--text3)}
-.btn-unsure:hover{background:rgba(240,192,96,.18);color:var(--yellow);border-color:var(--yellow-border)}
-.btn-unsure.active{background:var(--yellow-bg);border-color:var(--yellow-border);color:var(--yellow);font-weight:500}
+.btn-star{width:38px;height:38px;border-radius:50%;border:1px solid #2d3548;background:transparent;color:#475569;cursor:pointer;font-size:19px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0;line-height:1;padding:0}
+.btn-star:hover{color:var(--yellow);border-color:var(--yellow-border)}
+.btn-star.active{color:var(--yellow);border-color:var(--yellow-border);background:var(--yellow-bg)}
+.btn-star.invis{opacity:0;pointer-events:none}
 .qnb.ans-unsure{border-color:rgba(240,192,96,.5);background:rgba(240,192,96,.08);color:var(--yellow)}
 .qnb.ans-unsure.cur{background:var(--yellow);color:#0f1117;font-weight:700}
-.unsure-tag{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
+.unsure-tag{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);font-size:13px;letter-spacing:.02em}
 .wrong-tag{background:rgba(224,82,82,.15);color:#f08080;border:1px solid var(--red-border)}
 .fc-container{margin-bottom:1.2rem}
 .fc-container>.fc-wrap{margin-bottom:0;border-radius:var(--r) var(--r) 0 0}
@@ -549,11 +550,11 @@ function renderQ(a){
   const nbDisplay=answered?'':'none';
   const ecBadge=ec>0?`<span class="bdg ec-badge">錯誤 ${ec} 次</span>`:'';
   const isUnsure=!!unsureSet[q.id];
-  const unsureBtn=answered?`<button class="btn btn-unsure${isUnsure?' active':''}" id="unsure-btn" onclick="toggleUnsure()">${isUnsure?'⚠️ 已標記不確定':'🤔 標記不確定'}</button>`:'';
-  const aiBtn=answered?`<button class="btn btn-ai" onclick="showAIModal(${state.qi})">🤖 問 AI</button>`:'';
+  const starCls=`btn-star${isUnsure?' active':''}${answered?'':' invis'}`;
   const ecHint=answered&&ec>=2?`<div class="note-box ec-hint" style="margin-top:.5rem">⚠️ 你已答錯此題 <strong>${ec} 次</strong>，建議點「問 AI」獲取更詳細解析。</div>`:'';
   const sessionLabel=q.session?` 第${q.session}次`:'';
-  const unsureMeta=isUnsure?`<span class="bdg unsure-tag">⚠️ 不確定</span>`:'';
+  const unsureMeta=isUnsure?`<span class="bdg unsure-tag">⭐ 不確定</span>`:'';
+  const aiBtnHtml=answered?`<button class="btn btn-ai" onclick="showAIModal(${state.qi})" style="width:100%;margin-top:.6rem">🤖 問 AI 獲取詳細解析</button>`:'';
   a.innerHTML=`<div class="card">
     <div class="meta">
       <span class="bdg bdg-yr mono">民國${q.roc_year}年${sessionLabel} 第${q.examNo}題</span>
@@ -564,13 +565,15 @@ function renderQ(a){
     </div>
     <div class="act" style="margin-top:0;margin-bottom:.75rem">
       <button class="btn" onclick="jumpTo(Math.max(0,state.qi-1))" ${state.qi===0?'disabled':''}>&#8592; 上一題</button>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">${unsureBtn}${aiBtn}<button class="btn btnp" id="nb" onclick="jumpTo(state.qi+1)" style="display:${nbDisplay}">下一題 &#8594;</button></div>
+      <button class="${starCls}" id="unsure-btn" onclick="toggleUnsure()" title="${isUnsure?'取消不確定標記':'標記為不確定'}">&#9733;</button>
+      <button class="btn btnp" id="nb" onclick="jumpTo(state.qi+1)" style="display:${nbDisplay}">下一題 &#8594;</button>
     </div>
     <div class="qt">${q.q}</div>
     ${q.imgs&&q.imgs.length?`<div class="q-imgs">${q.imgs.map(s=>`<img src="${s}" alt="題目圖片" onclick="this.style.maxWidth=this.style.maxWidth?'':'none'">`).join('')}</div>`:''}
     <div class="opts">${optsHtml}</div>
     <div class="exp ${expShow}" id="exp"><div class="exp-t mono">解析</div>${q.exp}${noteHtml}${ecHint}</div>
     <div class="wexp ${wexpShow}" id="wexp"><div class="wexp-t mono" id="wexp-t">${wexpTitle}</div><span id="wexp-body">${wexpBody}</span></div>
+    <div id="ai-wrap">${aiBtnHtml}</div>
   </div>`;
 }
 function pick(i,ans){
@@ -593,18 +596,15 @@ function pick(i,ans){
     if(we){document.getElementById('wexp-body').textContent=q.we[i];if(t)t.innerHTML='你可能選這個，是因為&#x2026;&#x2026;';we.classList.add('show');}
   }
   const nb=document.getElementById('nb');if(nb)nb.style.display='';
-  const actInner=nb&&nb.parentNode;
-  if(actInner&&!actInner.querySelector('.btn-unsure')){
-    const ubtn=document.createElement('button');
-    ubtn.id='unsure-btn';ubtn.className='btn btn-unsure';
-    ubtn.textContent='🤔 標記不確定';ubtn.onclick=()=>toggleUnsure();
-    actInner.insertBefore(ubtn,actInner.querySelector('.btn-ai')||nb);
-  }
-  if(actInner&&!actInner.querySelector('.btn-ai')){
+  const ubtn=document.getElementById('unsure-btn');
+  if(ubtn)ubtn.classList.remove('invis');
+  const aiWrap=document.getElementById('ai-wrap');
+  if(aiWrap&&!aiWrap.querySelector('.btn-ai')){
     const btn=document.createElement('button');
-    btn.className='btn btn-ai';btn.textContent='🤖 問 AI';
+    btn.className='btn btn-ai';btn.style.cssText='width:100%;margin-top:.6rem';
+    btn.textContent='🤖 問 AI 獲取詳細解析';
     btn.onclick=()=>showAIModal(state.qi);
-    actInner.insertBefore(btn,nb);
+    aiWrap.appendChild(btn);
   }
   const ec=errorCounts[q.id]||0;
   if(!correct&&ec>=2){
@@ -638,15 +638,15 @@ function toggleUnsure(){
   const btn=document.getElementById('unsure-btn');
   if(btn){
     const active=!!unsureSet[q.id];
-    btn.textContent=active?'⚠️ 已標記不確定':'🤔 標記不確定';
     btn.classList.toggle('active',active);
+    btn.title=active?'取消不確定標記':'標記為不確定';
   }
   const meta=document.querySelector('.meta');
   if(meta){
     const old=meta.querySelector('.unsure-tag');if(old)old.remove();
     if(unsureSet[q.id]){
       const tag=document.createElement('span');
-      tag.className='bdg unsure-tag';tag.textContent='⚠️ 不確定';
+      tag.className='bdg unsure-tag';tag.textContent='⭐ 不確定';
       const qn=meta.querySelector('.qn');if(qn)meta.insertBefore(tag,qn);else meta.appendChild(tag);
     }
   }
