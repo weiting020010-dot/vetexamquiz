@@ -368,7 +368,7 @@ function renderNav(){
     else if(isUnsure)cls+=' ans-unsure';
     const ecBadge=ec>=2?`<sup style="font-size:8px;color:#f0c060;margin-left:1px">${ec}</sup>`:'';
     const unsureDot=isUnsure&&st==='ok'?`<sup style="font-size:8px;color:var(--yellow);margin-left:1px">?</sup>`:'';
-    return `<button class="${cls}" onclick="jumpTo(${i})" title="民國${q.roc_year}年 第${q.examNo}題${ec?' | 錯'+ec+'次':''}${isUnsure?' | ⚠️ 不確定':''}">${q.examNo}${ecBadge}${unsureDot}</button>`;
+    return `<button class="${cls}" onclick="jumpTo(${i})" title="民國${q.roc_year}年 第${q.examNo}題${ec?' | 錯'+ec+'次':''}${isUnsure?' | ★':''}">${q.examNo}${ecBadge}${unsureDot}</button>`;
   }).join('');
 }
 function jumpTo(idx){
@@ -417,12 +417,12 @@ function renderFlashcards(a){
     a.innerHTML=`<div class="card" style="text-align:center;padding:2.5rem 1rem">
       <div style="font-size:2.2rem;margin-bottom:.75rem">🎯</div>
       <div style="font-size:15px;color:var(--text2);margin-bottom:.5rem">目前沒有複習字卡</div>
-      <div style="font-size:12px;color:var(--text3)">答錯或標記「不確定」的題目，會自動在這裡生成翻轉字卡</div>
+      <div style="font-size:12px;color:var(--text3)">答錯或標記「★」的題目，會自動在這裡生成翻轉字卡</div>
     </div>`;return;
   }
   const wCnt=reviewQs.filter(q=>qStates[q.id]&&qStates[q.id].startsWith('no')).length;
   const uCnt=reviewQs.filter(q=>unsureSet[q.id]).length;
-  const countLabel=[wCnt?`答錯 ${wCnt} 題`:'',uCnt?`不確定 ${uCnt} 題`:''].filter(Boolean).join('、');
+  const countLabel=[wCnt?`答錯 ${wCnt} 題`:'',uCnt?`已標記 ${uCnt} 題`:''].filter(Boolean).join('、');
   let html=`<div style="margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
     <span style="font-size:12px;color:var(--text3);font-family:'Courier New',monospace">共 ${reviewQs.length} 張字卡（${countLabel}）· 點擊翻面</span>
     <button class="btn-clr" onclick="expandAllFC()">全部展開</button>
@@ -438,11 +438,11 @@ function renderFlashcards(a){
     const ecTag=ec>=2?`<span style="font-size:10px;color:#f0c060;margin-left:5px">✕${ec}次</span>`:'';
     const tags=[
       isWrong?`<span class="bdg wrong-tag">答錯</span>`:'',
-      isUnsure?`<span class="bdg unsure-tag">⚠️ 不確定</span>`:'',
+      isUnsure?`<span class="bdg unsure-tag">★</span>`:'',
     ].filter(Boolean).join('');
     const frontNote=isWrong
       ?`<div style="font-size:12px;color:#f08080;margin-top:.5rem">你選了 (${pickedLetter}) — 點擊查看正確答案</div>`
-      :`<div style="font-size:12px;color:var(--yellow);margin-top:.5rem">已標記不確定 — 點擊確認正確答案</div>`;
+      :`<div style="font-size:12px;color:var(--yellow);margin-top:.5rem">已標記 ★ — 點擊確認正確答案</div>`;
     const note=getNote(q.id);
     const noteImgsHtml=note.imgs.map((src,i)=>`<div class="note-img-wrap"><img src="${src}" alt="筆記圖片" onclick="viewImg('${src}')"><button class="note-img-del" onclick="removeNoteImg('${q.id}',${i},${idx})" title="刪除">✕</button></div>`).join('');
     html+=`<div class="fc-container">
@@ -484,12 +484,12 @@ function renderSummary(a){
     a.innerHTML=`<div class="card" style="text-align:center;padding:2.5rem 1rem">
       <div style="font-size:2.2rem;margin-bottom:.75rem">🎉</div>
       <div style="font-size:15px;color:var(--text2);margin-bottom:.5rem">目前沒有需要複習的題目</div>
-      <div style="font-size:12px;color:var(--text3)">答錯或標記「不確定」的題目，重點整理會出現在這裡</div>
+      <div style="font-size:12px;color:var(--text3)">答錯或標記「★」的題目，重點整理會出現在這裡</div>
     </div>`;return;
   }
   const wCnt=reviewQs.filter(q=>qStates[q.id]&&qStates[q.id].startsWith('no')).length;
   const uCnt=reviewQs.filter(q=>unsureSet[q.id]).length;
-  const countLabel=[wCnt?`答錯 ${wCnt} 題`:'',uCnt?`不確定 ${uCnt} 題`:''].filter(Boolean).join('、');
+  const countLabel=[wCnt?`答錯 ${wCnt} 題`:'',uCnt?`已標記 ${uCnt} 題`:''].filter(Boolean).join('、');
   let html=`<div style="margin-bottom:1rem;font-size:12px;color:var(--text3);font-family:'Courier New',monospace">共 ${reviewQs.length} 題需複習（${countLabel}）</div>`;
   reviewQs.forEach(q=>{
     const isWrong=qStates[q.id]&&qStates[q.id].startsWith('no');
@@ -502,7 +502,7 @@ function renderSummary(a){
     const wexp=(!isNaN(picked)&&q.we&&q.we[picked])?q.we[picked]:'';
     const tags=[
       isWrong?`<span class="bdg wrong-tag">答錯</span>`:'',
-      isUnsure?`<span class="bdg unsure-tag">⚠️ 不確定</span>`:'',
+      isUnsure?`<span class="bdg unsure-tag">★</span>`:'',
     ].filter(Boolean).join(' ');
     html+=`<div class="sp-card">
       <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:.5rem">
@@ -589,7 +589,7 @@ function renderQ(a){
   const starCls=`btn-star${isUnsure?' active':''}${answered?'':' invis'}`;
   const ecHint=answered&&ec>=2?`<div class="note-box ec-hint" style="margin-top:.5rem">⚠️ 你已答錯此題 <strong>${ec} 次</strong>，建議點「問 AI」獲取更詳細解析。</div>`:'';
   const sessionLabel=q.session?` 第${q.session}次`:'';
-  const unsureMeta=isUnsure?`<span class="bdg unsure-tag">⭐ 不確定</span>`:'';
+  const unsureMeta=isUnsure?`<span class="bdg unsure-tag">★</span>`:'';
   const aiBtnHtml=answered?`<button class="btn btn-ai" onclick="showAIModal(${state.qi})" style="width:100%;margin-top:.6rem">🤖 問 AI 獲取詳細解析</button>`:'';
   a.innerHTML=`<div class="card">
     <div class="meta">
@@ -601,7 +601,7 @@ function renderQ(a){
     </div>
     <div class="act" style="margin-top:0;margin-bottom:.75rem">
       <button class="btn" onclick="jumpTo(Math.max(0,state.qi-1))" ${state.qi===0?'disabled':''}>&#8592; 上一題</button>
-      <button class="${starCls}" id="unsure-btn" onclick="toggleUnsure()" title="${isUnsure?'取消不確定標記':'標記為不確定'}">&#9733;</button>
+      <button class="${starCls}" id="unsure-btn" onclick="toggleUnsure()" title="★">&#9733;</button>
       <button class="btn btnp" id="nb" onclick="jumpTo(state.qi+1)" style="display:${nbDisplay}">下一題 &#8594;</button>
     </div>
     <div class="qt">${q.q}</div>
@@ -675,14 +675,14 @@ function toggleUnsure(){
   if(btn){
     const active=!!unsureSet[q.id];
     btn.classList.toggle('active',active);
-    btn.title=active?'取消不確定標記':'標記為不確定';
+    btn.title='★';
   }
   const meta=document.querySelector('.meta');
   if(meta){
     const old=meta.querySelector('.unsure-tag');if(old)old.remove();
     if(unsureSet[q.id]){
       const tag=document.createElement('span');
-      tag.className='bdg unsure-tag';tag.textContent='⭐ 不確定';
+      tag.className='bdg unsure-tag';tag.textContent='★';
       const qn=meta.querySelector('.qn');if(qn)meta.insertBefore(tag,qn);else meta.appendChild(tag);
     }
   }
