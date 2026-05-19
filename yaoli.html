@@ -262,7 +262,8 @@ function showLoginScreen(hint){
   document.getElementById('us-reg-screen').style.display='none';
   document.getElementById('main-app').style.display='none';
   setMsg('us-msg',hint||'','');
-  setTimeout(()=>{const i=document.getElementById('us-name');if(i){i.value='';i.focus();}},80);
+  const lastUser=localStorage.getItem(CUR_USER_KEY)||'';
+  setTimeout(()=>{const i=document.getElementById('us-name');if(i){i.value=lastUser;i.focus();}},80);
   const p=document.getElementById('us-pin');if(p)p.value='';
 }
 function showRegisterScreen(){
@@ -804,10 +805,7 @@ document.getElementById('qtotal').textContent=ALL_QS.length;
   if(curFilter!=='all')sel.value=curFilter;
 })();
 (function(){
-  const savedUser=localStorage.getItem(CUR_USER_KEY);
-  const accs=getAccounts();
-  if(savedUser&&accs[savedUser]){enterApp(savedUser);}
-  else{showLoginScreen();}
+  showLoginScreen();
 })();
 
 </script>
