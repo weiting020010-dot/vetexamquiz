@@ -121,6 +121,7 @@ footer{text-align:center;margin-top:36px;font-size:.75rem;color:#334155}
       <div class="pwd-wrap">
         <input id="r-pin2" type="password" placeholder="再輸入一次" autocomplete="new-password"
                onkeydown="if(event.key==='Enter')register()">
+        <button class="btn-eye" type="button" onclick="togglePwd('r-pin2',this)" tabindex="-1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
       </div>
     </div>
     <button class="btn-auth" id="r-btn" onclick="register()">建立帳號</button>
