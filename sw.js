@@ -1,6 +1,7 @@
-const CACHE = 'vetquiz-v20';
+const CACHE = 'vetquiz-v23';
 const PRECACHE = ['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
 const HTML_FILES = ['index.html','pathology.html','chuanran.html','yaoli.html',''];
+const FIREBASE_HOST = 'www.gstatic.com';
 
 // 安裝：預先快取靜態資源（不包含大型 HTML 題庫）
 self.addEventListener('install', e => {
@@ -24,7 +25,21 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if(e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
-  if(url.origin !== self.location.origin) return;
+  const isFirebase = url.hostname === FIREBASE_HOST;
+  if(url.origin !== self.location.origin && !isFirebase) return;
+
+  // Firebase CDN: cache-first（載入一次後離線可用）
+  if(isFirebase){
+    e.respondWith(
+      caches.open(CACHE).then(cache=>
+        cache.match(e.request).then(cached=>{
+          if(cached)return cached;
+          return fetch(e.request).then(res=>{if(res.ok)cache.put(e.request,res.clone());return res;}).catch(()=>null);
+        })
+      )
+    );
+    return;
+  }
 
   const path = url.pathname.split('/').pop();
   const isHTML = path === '' || HTML_FILES.includes(path);
