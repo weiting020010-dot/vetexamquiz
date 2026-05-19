@@ -26,6 +26,10 @@ body{background:#0f1117;color:#e2e8f0;font-family:'Segoe UI',system-ui,-apple-sy
 .field label{display:block;font-size:.78rem;color:#94a3b8;margin-bottom:5px}
 .field input{width:100%;background:#0f1117;border:1px solid #2d3548;border-radius:9px;padding:10px 12px;color:#e2e8f0;font-size:.95rem;outline:none}
 .field input:focus{border-color:#4f8ef7}
+.pwd-wrap{position:relative}
+.pwd-wrap input{padding-right:44px}
+.btn-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#64748b;cursor:pointer;font-size:1.1rem;padding:4px;line-height:1}
+.btn-eye:active{color:#94a3b8}
 .btn-auth{width:100%;background:#4f8ef7;color:#fff;border:none;border-radius:9px;padding:11px;font-size:.95rem;font-weight:600;cursor:pointer;margin-top:4px}
 .btn-auth:active{background:#3a7ae0}
 .auth-switch{text-align:center;margin-top:1rem;font-size:.78rem;color:#64748b}
@@ -73,8 +77,11 @@ footer{text-align:center;margin-top:36px;font-size:.75rem;color:#334155}
     </div>
     <div class="field">
       <label>密碼</label>
-      <input id="l-pin" type="password" placeholder="輸入密碼" autocomplete="current-password"
-             onkeydown="if(event.key==='Enter')login()">
+      <div class="pwd-wrap">
+        <input id="l-pin" type="password" placeholder="輸入密碼" autocomplete="current-password"
+               onkeydown="if(event.key==='Enter')login()">
+        <button class="btn-eye" type="button" onclick="togglePwd('l-pin',this)" tabindex="-1">👁</button>
+      </div>
     </div>
     <button class="btn-auth" onclick="login()">登入</button>
     <div class="auth-msg" id="l-msg"></div>
@@ -96,13 +103,18 @@ footer{text-align:center;margin-top:36px;font-size:.75rem;color:#334155}
     </div>
     <div class="field">
       <label>密碼（至少4位）</label>
-      <input id="r-pin" type="password" placeholder="設定密碼" autocomplete="new-password"
-             onkeydown="if(event.key==='Enter')document.getElementById('r-pin2').focus()">
+      <div class="pwd-wrap">
+        <input id="r-pin" type="password" placeholder="設定密碼" autocomplete="new-password"
+               onkeydown="if(event.key==='Enter')document.getElementById('r-pin2').focus()">
+        <button class="btn-eye" type="button" onclick="togglePwdGroup(this)" tabindex="-1">👁</button>
+      </div>
     </div>
     <div class="field">
       <label>確認密碼</label>
-      <input id="r-pin2" type="password" placeholder="再輸入一次" autocomplete="new-password"
-             onkeydown="if(event.key==='Enter')register()">
+      <div class="pwd-wrap">
+        <input id="r-pin2" type="password" placeholder="再輸入一次" autocomplete="new-password"
+               onkeydown="if(event.key==='Enter')register()">
+      </div>
     </div>
     <button class="btn-auth" onclick="register()">建立帳號</button>
     <div class="auth-msg" id="r-msg"></div>
@@ -173,6 +185,8 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 
+function togglePwd(id,btn){const el=document.getElementById(id);const show=el.type==='password';el.type=show?'text':'password';btn.textContent=show?'🙈':'👁';}
+function togglePwdGroup(btn){const show=document.getElementById('r-pin').type==='password';['r-pin','r-pin2'].forEach(id=>{document.getElementById(id).type=show?'text':'password';});btn.textContent=show?'🙈':'👁';}
 const ACCOUNTS_KEY='vetquiz_accounts';
 const CUR_USER_KEY='vetquiz_current_user';
 
