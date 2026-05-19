@@ -805,7 +805,10 @@ document.getElementById('qtotal').textContent=ALL_QS.length;
   if(curFilter!=='all')sel.value=curFilter;
 })();
 (function(){
-  showLoginScreen();
+  const savedUser=localStorage.getItem(CUR_USER_KEY);
+  const accs=getAccounts();
+  if(savedUser&&accs[savedUser]){enterApp(savedUser);}
+  else{showLoginScreen();}
 })();
 
 </script>
