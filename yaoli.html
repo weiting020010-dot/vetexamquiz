@@ -163,43 +163,6 @@ h1{font-size:21px;font-weight:700;line-height:1.3}
 </style>
 </head>
 <body>
-<div id="us-screen" class="us-screen" style="display:none">
-  <div class="us-box">
-    <div class="lbl mono" style="text-align:center;margin-bottom:.5rem">獸醫師國考題庫 · 藥理學</div>
-    <div class="us-title">登入</div>
-    <input id="us-name" class="us-input" placeholder="姓名或暱稱" autocomplete="username"
-           style="display:block;width:100%"
-           onkeydown="if(event.key==='Enter')document.getElementById('us-pin').focus()">
-    <input id="us-pin" type="password" class="us-input" placeholder="密碼" autocomplete="current-password"
-           style="display:block;width:100%;margin-top:8px"
-           onkeydown="if(event.key==='Enter')login()">
-    <button class="btn btnp" style="width:100%;margin-top:12px;padding:11px;font-size:14px" onclick="login()">登入</button>
-    <div id="us-msg" style="min-height:20px;font-size:12px;margin-top:8px;text-align:center;color:#f08080"></div>
-    <div style="text-align:center;margin-top:1.25rem;font-size:13px;color:var(--text3)">
-      第一次使用？ <button class="btn-sw" style="font-size:12px;padding:3px 12px" onclick="showRegisterScreen()">建立新帳號</button>
-    </div>
-  </div>
-</div>
-<div id="us-reg-screen" class="us-screen" style="display:none">
-  <div class="us-box">
-    <div class="lbl mono" style="text-align:center;margin-bottom:.5rem">獸醫師國考題庫 · 藥理學</div>
-    <div class="us-title">建立帳號</div>
-    <input id="reg-name" class="us-input" placeholder="姓名或暱稱（最多24字）" maxlength="24" autocomplete="username"
-           style="display:block;width:100%"
-           onkeydown="if(event.key==='Enter')document.getElementById('reg-pin').focus()">
-    <input id="reg-pin" type="password" class="us-input" placeholder="設定密碼" autocomplete="new-password"
-           style="display:block;width:100%;margin-top:8px"
-           onkeydown="if(event.key==='Enter')document.getElementById('reg-pin2').focus()">
-    <input id="reg-pin2" type="password" class="us-input" placeholder="再次輸入密碼" autocomplete="new-password"
-           style="display:block;width:100%;margin-top:8px"
-           onkeydown="if(event.key==='Enter')register()">
-    <button class="btn btnp" style="width:100%;margin-top:12px;padding:11px;font-size:14px" onclick="register()">建立帳號</button>
-    <div id="reg-msg" style="min-height:20px;font-size:12px;margin-top:8px;text-align:center;color:#f08080"></div>
-    <div style="text-align:center;margin-top:1.25rem;font-size:13px;color:var(--text3)">
-      已有帳號？ <button class="btn-sw" style="font-size:12px;padding:3px 12px" onclick="showLoginScreen()">返回登入</button>
-    </div>
-  </div>
-</div>
 <div id="main-app" style="display:none">
 <div class="wrap">
 <div class="hdr">
@@ -252,60 +215,12 @@ function getAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)|
 function saveAccounts(a){localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(a));}
 function getUserSaveKey(){return SAVE_KEY_BASE+'_'+currentUser;}
 function getUserNotesKey(){return NOTES_KEY_BASE+'_'+currentUser;}
-async function hashPin(text){
-  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('VetQuiz:'+text));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
 function setMsg(id,msg,color){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.color=color||'#f08080';}}
-function showLoginScreen(hint){
-  document.getElementById('us-screen').style.display='flex';
-  document.getElementById('us-reg-screen').style.display='none';
-  document.getElementById('main-app').style.display='none';
-  setMsg('us-msg',hint||'','');
-  const lastUser=localStorage.getItem(CUR_USER_KEY)||'';
-  setTimeout(()=>{const i=document.getElementById('us-name');if(i){i.value=lastUser;i.focus();}},80);
-  const p=document.getElementById('us-pin');if(p)p.value='';
-}
-function showRegisterScreen(){
-  document.getElementById('us-screen').style.display='none';
-  document.getElementById('us-reg-screen').style.display='flex';
-  document.getElementById('main-app').style.display='none';
-  setMsg('reg-msg','','');
-  setTimeout(()=>{const i=document.getElementById('reg-name');if(i){i.value='';i.focus();}},80);
-  ['reg-pin','reg-pin2'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-}
-async function login(){
-  const name=(document.getElementById('us-name').value||'').trim();
-  const pin=document.getElementById('us-pin').value||'';
-  if(!name){setMsg('us-msg','請輸入姓名');return;}
-  const accs=getAccounts();
-  if(!accs[name]){setMsg('us-msg','帳號不存在，請建立新帳號');return;}
-  const hash=await hashPin(pin);
-  if(hash!==accs[name]){setMsg('us-msg','密碼錯誤');return;}
-  enterApp(name);
-}
-async function register(){
-  const name=(document.getElementById('reg-name').value||'').trim();
-  const pin=document.getElementById('reg-pin').value||'';
-  const pin2=document.getElementById('reg-pin2').value||'';
-  if(!name){setMsg('reg-msg','請輸入姓名');return;}
-  if(name.length>24){setMsg('reg-msg','名稱最多24個字元');return;}
-  if(!pin){setMsg('reg-msg','請設定密碼');return;}
-  if(pin!==pin2){setMsg('reg-msg','兩次密碼不一致');return;}
-  const accs=getAccounts();
-  if(accs[name]){setMsg('reg-msg','此名稱已被使用，請換一個或回登入頁');return;}
-  accs[name]=await hashPin(pin);
-  saveAccounts(accs);
-  enterApp(name);
-}
 function enterApp(name){
   currentUser=name;
-  localStorage.setItem(CUR_USER_KEY,name);
   qStates={};errorCounts={};unsureSet={};notesStore={};
   state={qi:0,done:0,cor:0};mode=0;curFilter='all';
   loadNotes();loadProgress();
-  document.getElementById('us-screen').style.display='none';
-  document.getElementById('us-reg-screen').style.display='none';
   document.getElementById('main-app').style.display='';
   document.getElementById('cur-user-name').textContent=name;
   const yrsel=document.getElementById('yrsel');if(yrsel)yrsel.value='all';
@@ -315,7 +230,7 @@ function enterApp(name){
 function logout(){
   currentUser=null;localStorage.removeItem(CUR_USER_KEY);
   qStates={};errorCounts={};unsureSet={};notesStore={};state={qi:0,done:0,cor:0};
-  showLoginScreen();
+  location.href='./index.html';
 }
 function deleteOwnAccount(){
   if(!currentUser)return;
@@ -808,7 +723,7 @@ document.getElementById('qtotal').textContent=ALL_QS.length;
   const savedUser=localStorage.getItem(CUR_USER_KEY);
   const accs=getAccounts();
   if(savedUser&&accs[savedUser]){enterApp(savedUser);}
-  else{showLoginScreen();}
+  else{location.href='./index.html';}
 })();
 
 </script>

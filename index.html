@@ -12,15 +12,41 @@
 <title>獸醫師國考題庫</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0f1117;color:#e2e8f0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;padding:24px 16px 48px}
-header{text-align:center;padding:32px 0 28px}
+body{background:#0f1117;color:#e2e8f0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh}
+
+/* 登入畫面 */
+.auth-screen{position:fixed;inset:0;background:#0f1117;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;z-index:100}
+.auth-screen.hidden{display:none}
+.auth-logo{font-size:2.8rem;margin-bottom:8px}
+.auth-title{font-size:1.4rem;font-weight:700;color:#f1f5f9;margin-bottom:4px}
+.auth-sub{font-size:.8rem;color:#64748b;margin-bottom:2rem}
+.auth-box{width:100%;max-width:340px;background:#1e2330;border:1px solid #2d3548;border-radius:16px;padding:1.6rem 1.4rem}
+.auth-box h2{font-size:1rem;font-weight:600;color:#f1f5f9;margin-bottom:1.2rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.78rem;color:#94a3b8;margin-bottom:5px}
+.field input{width:100%;background:#0f1117;border:1px solid #2d3548;border-radius:9px;padding:10px 12px;color:#e2e8f0;font-size:.95rem;outline:none}
+.field input:focus{border-color:#4f8ef7}
+.btn-auth{width:100%;background:#4f8ef7;color:#fff;border:none;border-radius:9px;padding:11px;font-size:.95rem;font-weight:600;cursor:pointer;margin-top:4px}
+.btn-auth:active{background:#3a7ae0}
+.auth-switch{text-align:center;margin-top:1rem;font-size:.78rem;color:#64748b}
+.auth-switch button{background:none;border:none;color:#4f8ef7;cursor:pointer;font-size:.78rem;padding:0 4px}
+.auth-msg{min-height:18px;font-size:.78rem;margin-top:.6rem;text-align:center;color:#f08080}
+
+/* 主畫面 */
+#main-app{display:none;min-height:100vh;padding:24px 16px 48px}
+.topbar{display:flex;align-items:center;justify-content:space-between;max-width:480px;margin:0 auto 0;padding:0 2px 20px}
+.topbar-user{font-size:.82rem;color:#94a3b8}
+.topbar-user span{color:#4f8ef7;font-weight:600}
+.btn-logout{background:none;border:1px solid #2d3548;border-radius:8px;padding:5px 12px;font-size:.75rem;color:#64748b;cursor:pointer}
+.btn-logout:active{color:#f08080;border-color:#f08080}
+header{text-align:center;padding:12px 0 28px}
 header h1{font-size:1.6rem;font-weight:700;letter-spacing:.04em;color:#f1f5f9}
 header p{margin-top:8px;font-size:.85rem;color:#94a3b8}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:480px;margin:0 auto}
 .card{background:#1e2330;border:1px solid #2d3548;border-radius:14px;padding:20px 16px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s;position:relative;overflow:hidden}
 .card.active{border-color:#4f8ef7;cursor:pointer}
 .card.active:hover{transform:translateY(-2px);border-color:#6ba3ff}
-.card.inactive{opacity:.45;cursor:default}
+.card.inactive{opacity:.45;cursor:default;pointer-events:none}
 .card-icon{font-size:2rem;margin-bottom:10px}
 .card-name{font-size:1rem;font-weight:600;color:#f1f5f9;margin-bottom:4px}
 .card-count{font-size:.78rem;color:#64748b}
@@ -32,61 +58,193 @@ footer{text-align:center;margin-top:36px;font-size:.75rem;color:#334155}
 </style>
 </head>
 <body>
-<header>
-  <h1>獸醫師國考題庫</h1>
-  <p>六大科目 · 歷屆官方試題</p>
-</header>
 
-<div class="grid">
-  <a class="card inactive" href="#">
-    <div class="card-icon">🐾</div>
-    <div class="card-name">普通病學</div>
-    <div class="card-count">題庫建置中</div>
-    <span class="badge badge-soon">即將上線</span>
-  </a>
-
-  <a class="card active" href="./yaoli.html">
-    <div class="card-icon">💊</div>
-    <div class="card-name">藥理學</div>
-    <div class="card-count">1360 題 · 104–114年</div>
-    <span class="badge badge-ready">可使用</span>
-  </a>
-
-  <a class="card active" href="./pathology.html">
-    <div class="card-icon">🔬</div>
-    <div class="card-name">病理學</div>
-    <div class="card-count">1360 題 · 104–114年</div>
-    <span class="badge badge-ready">可使用</span>
-  </a>
-
-  <a class="card active" href="./chuanran.html">
-    <div class="card-icon">🦠</div>
-    <div class="card-name">傳染病學</div>
-    <div class="card-count">1360 題 · 104–114年</div>
-    <span class="badge badge-ready">可使用</span>
-  </a>
-
-  <a class="card inactive" href="#">
-    <div class="card-icon">🏥</div>
-    <div class="card-name">公共衛生學</div>
-    <div class="card-count">題庫建置中</div>
-    <span class="badge badge-soon">即將上線</span>
-  </a>
-
-  <a class="card inactive" href="#">
-    <div class="card-icon">🩺</div>
-    <div class="card-name">實習診斷學</div>
-    <div class="card-count">題庫建置中</div>
-    <span class="badge badge-soon">即將上線</span>
-  </a>
+<!-- 登入畫面 -->
+<div id="login-screen" class="auth-screen">
+  <div class="auth-logo">🐾</div>
+  <div class="auth-title">獸醫師國考題庫</div>
+  <div class="auth-sub">請登入以繼續</div>
+  <div class="auth-box">
+    <h2>登入</h2>
+    <div class="field">
+      <label>帳號</label>
+      <input id="l-name" type="text" placeholder="輸入帳號" autocomplete="username"
+             onkeydown="if(event.key==='Enter')document.getElementById('l-pin').focus()">
+    </div>
+    <div class="field">
+      <label>密碼</label>
+      <input id="l-pin" type="password" placeholder="輸入密碼" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter')login()">
+    </div>
+    <button class="btn-auth" onclick="login()">登入</button>
+    <div class="auth-msg" id="l-msg"></div>
+  </div>
+  <div class="auth-switch">還沒有帳號？<button onclick="showReg()">註冊</button></div>
 </div>
 
-<footer>v21 · 僅供個人複習使用</footer>
+<!-- 註冊畫面 -->
+<div id="reg-screen" class="auth-screen hidden">
+  <div class="auth-logo">🐾</div>
+  <div class="auth-title">獸醫師國考題庫</div>
+  <div class="auth-sub">建立新帳號</div>
+  <div class="auth-box">
+    <h2>註冊</h2>
+    <div class="field">
+      <label>帳號（2–16字）</label>
+      <input id="r-name" type="text" placeholder="輸入帳號" autocomplete="username"
+             onkeydown="if(event.key==='Enter')document.getElementById('r-pin').focus()">
+    </div>
+    <div class="field">
+      <label>密碼（至少4位）</label>
+      <input id="r-pin" type="password" placeholder="設定密碼" autocomplete="new-password"
+             onkeydown="if(event.key==='Enter')document.getElementById('r-pin2').focus()">
+    </div>
+    <div class="field">
+      <label>確認密碼</label>
+      <input id="r-pin2" type="password" placeholder="再輸入一次" autocomplete="new-password"
+             onkeydown="if(event.key==='Enter')register()">
+    </div>
+    <button class="btn-auth" onclick="register()">建立帳號</button>
+    <div class="auth-msg" id="r-msg"></div>
+  </div>
+  <div class="auth-switch">已有帳號？<button onclick="showLogin()">返回登入</button></div>
+</div>
+
+<!-- 主畫面 -->
+<div id="main-app">
+  <div class="topbar">
+    <div class="topbar-user">你好，<span id="user-name-display"></span></div>
+    <button class="btn-logout" onclick="logout()">登出</button>
+  </div>
+  <header>
+    <h1>獸醫師國考題庫</h1>
+    <p>六大科目 · 歷屆官方試題</p>
+  </header>
+
+  <div class="grid">
+    <a class="card inactive" href="#">
+      <div class="card-icon">🐾</div>
+      <div class="card-name">普通病學</div>
+      <div class="card-count">題庫建置中</div>
+      <span class="badge badge-soon">即將上線</span>
+    </a>
+
+    <a class="card active" href="./yaoli.html">
+      <div class="card-icon">💊</div>
+      <div class="card-name">藥理學</div>
+      <div class="card-count">1360 題 · 104–114年</div>
+      <span class="badge badge-ready">可使用</span>
+    </a>
+
+    <a class="card active" href="./pathology.html">
+      <div class="card-icon">🔬</div>
+      <div class="card-name">病理學</div>
+      <div class="card-count">1360 題 · 104–114年</div>
+      <span class="badge badge-ready">可使用</span>
+    </a>
+
+    <a class="card active" href="./chuanran.html">
+      <div class="card-icon">🦠</div>
+      <div class="card-name">傳染病學</div>
+      <div class="card-count">1360 題 · 104–114年</div>
+      <span class="badge badge-ready">可使用</span>
+    </a>
+
+    <a class="card inactive" href="#">
+      <div class="card-icon">🏥</div>
+      <div class="card-name">公共衛生學</div>
+      <div class="card-count">題庫建置中</div>
+      <span class="badge badge-soon">即將上線</span>
+    </a>
+
+    <a class="card inactive" href="#">
+      <div class="card-icon">🩺</div>
+      <div class="card-name">實習診斷學</div>
+      <div class="card-count">題庫建置中</div>
+      <span class="badge badge-soon">即將上線</span>
+    </a>
+  </div>
+
+  <footer>v22 · 僅供個人複習使用</footer>
+</div>
 
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
+
+const ACCOUNTS_KEY='vetquiz_accounts';
+const CUR_USER_KEY='vetquiz_current_user';
+
+function getAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)||'{}');}catch(e){return {};}}
+function saveAccounts(a){localStorage.setItem(ACCOUNTS_KEY,JSON.stringify(a));}
+
+async function hashPin(text){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('VetQuiz:'+text));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function showLogin(){
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('reg-screen').classList.add('hidden');
+  setTimeout(()=>{document.getElementById('l-name').focus();},80);
+}
+function showReg(){
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('reg-screen').classList.remove('hidden');
+  setTimeout(()=>{document.getElementById('r-name').focus();},80);
+}
+function enterApp(name){
+  localStorage.setItem(CUR_USER_KEY,name);
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('reg-screen').classList.add('hidden');
+  document.getElementById('main-app').style.display='block';
+  document.getElementById('user-name-display').textContent=name;
+}
+function logout(){
+  localStorage.removeItem(CUR_USER_KEY);
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('l-msg').textContent='';
+  document.getElementById('l-pin').value='';
+  showLogin();
+}
+
+async function login(){
+  const name=document.getElementById('l-name').value.trim();
+  const pin=document.getElementById('l-pin').value;
+  const msg=document.getElementById('l-msg');
+  if(!name||!pin){msg.textContent='請填寫帳號與密碼';return;}
+  const accs=getAccounts();
+  if(!accs[name]){msg.textContent='帳號不存在';return;}
+  const h=await hashPin(pin);
+  if(accs[name]!==h){msg.textContent='密碼錯誤';return;}
+  msg.textContent='';
+  enterApp(name);
+}
+
+async function register(){
+  const name=document.getElementById('r-name').value.trim();
+  const pin=document.getElementById('r-pin').value;
+  const pin2=document.getElementById('r-pin2').value;
+  const msg=document.getElementById('r-msg');
+  if(name.length<2||name.length>16){msg.textContent='帳號需 2–16 字';return;}
+  if(pin.length<4){msg.textContent='密碼至少 4 位';return;}
+  if(pin!==pin2){msg.textContent='兩次密碼不一致';return;}
+  const accs=getAccounts();
+  if(accs[name]){msg.textContent='此帳號已存在';return;}
+  const h=await hashPin(pin);
+  accs[name]=h;saveAccounts(accs);
+  msg.style.color='#4ade80';msg.textContent='註冊成功，正在登入…';
+  setTimeout(()=>enterApp(name),600);
+}
+
+// 初始化：檢查是否已登入
+(function(){
+  const saved=localStorage.getItem(CUR_USER_KEY);
+  const accs=getAccounts();
+  if(saved&&accs[saved]){enterApp(saved);}
+  else{showLogin();}
+})();
 </script>
 </body>
 </html>
