@@ -87,6 +87,7 @@ footer{text-align:center;margin-top:36px;font-size:.75rem;color:#334155}
     </div>
     <button class="btn-auth" id="l-btn" onclick="login()">登入</button>
     <div class="auth-msg" id="l-msg"></div>
+    <div style="text-align:center;margin-top:.6rem"><button style="background:none;border:none;color:#475569;cursor:pointer;font-size:.75rem" onclick="resetPwd()">忘記密碼？</button></div>
   </div>
   <div class="auth-switch">還沒有帳號？<button onclick="showReg()">註冊</button></div>
 </div>
@@ -240,6 +241,18 @@ function setRegLoading(loading){
   btn.disabled=loading;btn.textContent=loading?'建立中…':'建立帳號';
 }
 
+async function resetPwd(){
+  const email=document.getElementById('l-email').value.trim();
+  const msg=document.getElementById('l-msg');
+  if(!email){msg.textContent='請先填寫 Email';msg.style.color='#f08080';return;}
+  try{
+    await auth.sendPasswordResetEmail(email);
+    msg.style.color='#4ade80';msg.textContent='重設密碼信已寄出，請檢查信箱';
+  }catch(err){
+    msg.style.color='#f08080';
+    msg.textContent=err.code==='auth/user-not-found'?'此 Email 尚未註冊':'發送失敗，請確認 Email 是否正確';
+  }
+}
 async function login(){
   const email=document.getElementById('l-email').value.trim();
   const pin=document.getElementById('l-pin').value;
