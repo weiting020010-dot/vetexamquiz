@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>獸醫傳染病學 歷屆國考題庫</title>
+<style>
+:root{
+  --bg:#0f1117;--bg2:#1a1d27;--bg3:#22263a;
+  --border:#2e3347;--border2:#3d4260;
+  --text:#e8eaf6;--text2:#9096b8;--text3:#555d80;
+  --accent:#5c6bc0;--accent2:#7986cb;
+  --green:#43a867;--green-bg:#0d2318;--green-border:#1e4d32;
+  --red:#e05252;--red-bg:#250f0f;--red-border:#4d1f1f;
+  --yellow:#f0c060;--yellow-bg:rgba(240,192,96,.08);--yellow-border:rgba(240,192,96,.3);
+  --r:10px;--rs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;min-height:100vh;padding:1.5rem 1rem}
+.wrap{max-width:760px;margin:0 auto}
+.hdr{margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:1.25rem}
+.hdr-row{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.mono{font-family:"Courier New",Courier,monospace}
+.lbl{font-size:11px;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+h1{font-size:21px;font-weight:700;line-height:1.3}
+.sub{font-size:12px;color:var(--text3);margin-top:4px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.st{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:7px 12px;text-align:center;min-width:56px}
+.st-n{font-size:18px;font-weight:700;font-family:"Courier New",monospace}
+.st-l{font-size:10px;color:var(--text3);margin-top:2px}
+.ctrl{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.csel{flex:1;min-width:160px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:13px;cursor:pointer}
+.csel:focus{outline:none;border-color:var(--accent)}
+.modes{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:4px}
+.mb{flex:1;padding:7px 10px;font-size:13px;border-radius:7px;border:none;background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;transition:.15s}
+.mb:hover{color:var(--text)}
+.mb.on{background:var(--bg3);color:var(--text);font-weight:500}
+.pb{height:3px;background:var(--border);border-radius:2px;margin-bottom:1.25rem;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .35s cubic-bezier(.4,0,.2,1)}
+/* nav panel */
+.nav-wrap{margin-bottom:1rem}
+.nav-hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;user-select:none}
+.nav-hdr:hover{border-color:var(--border2)}
+.nav-title{font-size:12px;color:var(--text2);font-family:"Courier New",monospace;letter-spacing:.05em}
+.nav-arrow{font-size:10px;color:var(--text3);transition:transform .2s}
+.nav-arrow.open{transform:rotate(180deg)}
+.nav-grid{display:flex;flex-wrap:wrap;gap:4px;padding:10px;background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r) var(--r);max-height:180px;overflow-y:auto}
+.nav-grid.hidden{display:none}
+.qnb{width:34px;height:30px;border:1px solid var(--border);border-radius:5px;background:var(--bg);color:var(--text3);font-size:11px;font-family:"Courier New",monospace;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s}
+.qnb:hover{border-color:var(--accent2);color:var(--text)}
+.qnb.cur{border-color:var(--accent2);background:var(--accent);color:#fff;font-weight:700}
+.qnb.ans-ok{border-color:var(--green-border);background:var(--green-bg);color:#7dd9a4}
+.qnb.ans-ok.cur{background:var(--green);color:#fff}
+.qnb.ans-no{border-color:var(--red-border);background:var(--red-bg);color:#f08080}
+.qnb.ans-no.cur{background:var(--red);color:#fff}
+/* card */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-bottom:1rem}
+.meta{display:flex;align-items:center;gap:7px;margin-bottom:.9rem;flex-wrap:wrap}
+.bdg{font-size:11px;padding:3px 9px;border-radius:20px;font-family:"Courier New",monospace}
+.bdg-yr{background:rgba(92,107,192,.2);color:var(--accent2);border:1px solid rgba(92,107,192,.3)}
+.bdg-src{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.bdg-rv{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
+.bdg-multi{background:rgba(121,184,203,.2);color:#7bcae0;border:1px solid rgba(121,184,203,.3)}
+.qn{font-size:12px;color:var(--text3);margin-left:auto;font-family:"Courier New",monospace}
+.qt{font-size:15px;font-weight:500;color:var(--text);line-height:1.7;margin-bottom:1.1rem}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{padding:11px 13px;border:1px solid var(--border);border-radius:var(--rs);cursor:pointer;font-size:14px;color:var(--text2);transition:.15s;display:flex;gap:9px;align-items:flex-start;line-height:1.6;background:var(--bg)}
+.opt:hover:not(.dis){border-color:var(--border2);color:var(--text);background:var(--bg3)}
+.opt.ok{border-color:var(--green-border);background:var(--green-bg);color:#7dd9a4}
+.opt.no{border-color:var(--red-border);background:var(--red-bg);color:#f08080}
+.opt.dis{cursor:default}
+.opt.sel-multi{border-color:var(--accent);background:rgba(92,107,192,.15);color:var(--text)}
+.okey{font-weight:700;min-width:18px;flex-shrink:0;font-family:"Courier New",monospace;font-size:13px}
+.multi-hint{font-size:12px;color:var(--yellow);margin-bottom:.6rem;padding:6px 10px;background:var(--yellow-bg);border:1px solid var(--yellow-border);border-radius:var(--rs)}
+.exp{margin-top:.9rem;padding:13px 15px;background:var(--bg3);border-left:3px solid var(--accent);border-radius:0 var(--rs) var(--rs) 0;font-size:13px;color:var(--text2);line-height:1.8;display:none}
+.exp.show{display:block}
+.exp-t{font-weight:700;color:var(--accent2);margin-bottom:5px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-family:"Courier New",monospace}
+.wexp{margin-top:.6rem;padding:11px 14px;background:rgba(239,83,80,.07);border-left:3px solid var(--red-border);border-radius:0 var(--rs) var(--rs) 0;font-size:13px;color:var(--text2);line-height:1.8;display:none}
+.wexp.show{display:block}
+.wexp-t{font-weight:700;color:#f08080;margin-bottom:4px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-family:"Courier New",monospace}
+.act{display:flex;justify-content:space-between;align-items:center;margin-top:.9rem;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:var(--rs);border:1px solid var(--border2);background:var(--bg3);font-size:13px;color:var(--text2);cursor:pointer;transition:.15s}
+.btn:hover{color:var(--text);border-color:var(--accent)}
+.btn:disabled{opacity:.3;cursor:default}
+.btnp{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btnp:hover{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.btn-clr{padding:5px 10px;border-radius:var(--rs);border:1px solid var(--border);background:transparent;font-size:11px;color:var(--text3);cursor:pointer;letter-spacing:.03em}
+.btn-clr:hover{color:var(--red);border-color:var(--red-border)}
+/* result */
+.res{text-align:center;padding:2.5rem 1rem}
+.res-s{font-size:52px;font-weight:700;font-family:"Courier New",monospace}
+.res-sub{font-size:13px;color:var(--text3);margin-top:5px}
+.res-row{display:flex;gap:2rem;justify-content:center;margin:1.25rem 0;flex-wrap:wrap}
+.ri{text-align:center}
+.rn{font-size:22px;font-weight:700;font-family:"Courier New",monospace}
+.rl{font-size:12px;color:var(--text3);margin-top:3px}
+.grn{color:var(--green)}.red{color:var(--red)}
+/* images */
+.q-imgs{display:flex;flex-wrap:wrap;gap:8px;margin:.75rem 0 .25rem}
+.q-imgs img{max-width:100%;max-height:300px;border-radius:var(--rs);border:1px solid var(--border);background:var(--bg3);cursor:pointer;object-fit:contain}
+.q-imgs img:hover{border-color:var(--border2)}
+/* flashcard */
+.fc-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:2rem 1.5rem;text-align:center;cursor:pointer;user-select:none;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;transition:.2s}
+.fc-card:hover{border-color:var(--border2);background:var(--bg3)}
+.fc-front{width:100%}
+.fc-back{width:100%;display:none}
+.fc-card.flipped .fc-front{display:none}
+.fc-card.flipped .fc-back{display:block}
+.fc-q{font-size:16px;font-weight:600;color:var(--text);line-height:1.7;margin-bottom:.5rem}
+.fc-hint{font-size:12px;color:var(--text3);margin-top:.5rem}
+.fc-ans{font-size:15px;color:#7dd9a4;line-height:1.7;margin-bottom:.5rem}
+.fc-exp{font-size:13px;color:var(--text2);line-height:1.7;margin-top:.5rem}
+.fc-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:12px;background:rgba(92,107,192,.2);color:var(--accent2);border:1px solid rgba(92,107,192,.3);font-family:"Courier New",monospace;margin-bottom:.5rem}
+.fc-nav{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:.75rem}
+/* summary */
+.sm-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem;margin-bottom:1rem}
+.sm-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:.7rem;display:flex;align-items:center;gap:8px}
+.sm-badge{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(240,192,96,.12);color:var(--yellow);border:1px solid var(--yellow-border);font-family:"Courier New",monospace}
+.sm-body{font-size:13px;color:var(--text2);line-height:1.9}
+.sm-body p{margin-bottom:.5rem}
+.sm-body ul{margin-left:1.2rem;margin-bottom:.5rem}
+.sm-body li{margin-bottom:.25rem}
+.sm-compare{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.5rem 0}
+.sm-col{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);padding:.6rem .8rem;font-size:12px;line-height:1.7}
+.sm-col-title{font-size:11px;font-weight:700;color:var(--accent2);margin-bottom:.3rem;font-family:"Courier New",monospace;text-transform:uppercase;letter-spacing:.05em}
+/* footer */
+.foot{text-align:center;margin-top:2.5rem;font-size:11px;color:var(--text3);font-family:"Courier New",monospace;border-top:1px solid var(--border);padding-top:1.25rem}
+/* responsive */
+@media(max-width:480px){
+  h1{font-size:18px}
+  .st{padding:6px 9px;min-width:48px}.st-n{font-size:16px}
+  .mb{font-size:12px;padding:6px 6px}
+  .qt{font-size:14px}
+  .qnb{width:30px;height:28px;font-size:10px}
+  .sm-compare{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <div class="hdr-row">
+    <div>
+      <div class="lbl mono">獸醫師國考 &middot; 獸醫傳染病學 &middot; 官方歷屆題</div>
+      <h1>傳染病學 歷屆國考題庫</h1>
+      <div class="sub">共 <span id="qtotal">0</span> 題 &middot; 官方歷屆試題 &middot; v15</div>
+    </div>
+    <div class="stats">
+      <div class="st"><div class="st-n mono" id="sd">0</div><div class="st-l">已答</div></div>
+      <div class="st"><div class="st-n mono" id="sc">0</div><div class="st-l">答對</div></div>
+      <div class="st"><div class="st-n mono" id="sa">&#x2014;</div><div class="st-l">正確率</div></div>
+    </div>
+  </div>
+</div>
+<div class="ctrl">
+  <select class="csel" id="yrsel" onchange="setFilter(this.value)">
+    <option value="all">全部年份 / 考次</option>
+  </select>
+  <div class="modes">
+    <button class="mb on" id="m0" onclick="setM(0)">選擇題</button>
+    <button class="mb" id="m1" onclick="setM(1)">字卡</button>
+    <button class="mb" id="m2" onclick="setM(2)">重點</button>
+  </div>
+  <button class="btn-clr" onclick="clearProgress()" title="清除所有作答記錄">&#x21BA; 清除進度</button>
+</div>
+<div class="pb"><div class="pf" id="pf" style="width:0%"></div></div>
+<div class="nav-wrap" id="nav-wrap">
+  <div class="nav-hdr" onclick="toggleNav()">
+    <span class="nav-title mono">&#9783; 題號快速跳題</span>
+    <span class="nav-arrow" id="nav-arrow">&#9660;</span>
+  </div>
+  <div class="nav-grid hidden" id="nav-grid"></div>
+</div>
+<div id="area"></div>
+<div class="foot mono">獸醫師專技高考 &middot; 官方歷屆試題 &middot; 來源：阿摩線上測驗 (yamol.tw) &middot; 答案以考選部公告為準</div>
+</div>
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+const QUESTIONS = __JSON_DATA__;
+
+// ── SUMMARY CARDS (手工整理重點) ──────────────────────────────────────
+const SUMMARY_CARDS = [
+  {
+    title: "豬重要病毒性疫病速記",
+    badge: "豬病毒",
+    body: `<p><strong>PCV2（豬環狀病毒2型）</strong>：PMWS/PCVAD 病原，間質性肺炎＋全身淋巴結腫大，常與 PRRS 合併感染</p>
+<p><strong>PRRS（藍耳病）</strong>：Arteriviridae，繁殖障礙（流產、死產、弱仔）＋呼吸道症狀；<em>不致畸形胎</em></p>
+<p><strong>ASF（非洲豬瘟）</strong>：Asfarviridae，dsDNA，潛伏期 4–19 天，無疫苗，緊急撲殺</p>
+<p><strong>CSF（豬瘟）</strong>：Flaviviridae / Pestivirus，與 BVDV 親緣最近，可發生抗原交叉反應</p>
+<p><strong>FMD（口蹄疫）</strong>：Picornaviridae，出現症狀後 4–7 天可測到中和抗體，蹄部水疱為特徵</p>
+<p><strong>偽狂犬病（Aujeszky）</strong>：PRV，Herpesviridae，<em>只有1種血清型</em></p>
+<p><strong>Nipah virus</strong>：Paramyxoviridae / Henipavirus，豬為增幅宿主，果蝠為天然宿主，致死率高</p>`,
+    compare: []
+  },
+  {
+    title: "日本腦炎 & 人畜共通病原",
+    badge: "人畜共通",
+    body: `<p><strong>日本腦炎（JEV）</strong>：豬為增幅宿主（病毒血症持續5–7天），馬/人為末端宿主</p>
+<p><strong>E型肝炎（HEV）</strong>：基因型3、4可由豬傳人；豬為重要的人畜共通感染源</p>
+<p><strong>Giardia duodenalis</strong>：Genotype A、B 可感染人；Genotype E 為偶蹄目特異性，人畜共通性極低</p>
+<p><strong>豬瘟（CSFV）、PEDV</strong>：均不感染人類，非人畜共通病原</p>`,
+    compare: [
+      {
+        title: "增幅宿主 vs 末端宿主（日本腦炎）",
+        left:  { title: "增幅宿主（豬）",   text: "病毒血症高且持久（5–7天），使蚊子高度感染，維持 JEV 在環境中的循環" },
+        right: { title: "末端宿主（馬、人）", text: "病毒血症程度低，無法有效感染蚊子，傳播鏈在此終止" }
+      }
+    ]
+  },
+  {
+    title: "豬重要細菌性疫病",
+    badge: "細菌",
+    body: `<p><strong>Glässer's disease（格拉瑟病）</strong>：Glaesserella parasuis，保育期仔豬好發（5–8週），漿液纖維素性多發性漿膜炎＋關節炎＋腦膜炎；<em>病原屬上呼吸道常在菌（非消化道）</em></p>
+<p><strong>APP（放線桿菌胸膜肺炎）</strong>：A. pleuropneumoniae，出血性壞死性纖維素性胸膜肺炎，Apx毒素＋LPS；<em>各年齡均可感染，並非只限肥育期</em></p>
+<p><strong>豬丹毒</strong>：Erysipelothrix rhusiopathiae，菱形皮疹（diamond skin disease）；人畜共通；<em>透過飼料/水/土壤傳播，與蚊蟲媒介無關</em></p>
+<p><strong>Lancefield 分群</strong>：依鏈球菌細胞壁 C多醣（群特異性多醣抗原）分類，非依溶血型態</p>`,
+    compare: []
+  },
+  {
+    title: "雞重要疫病速記",
+    badge: "家禽",
+    body: `<p><strong>馬立克病（Marek's）</strong>：GaHV-2（Herpesviridae），淋巴瘤，羽毛囊上皮排毒</p>
+<p><strong>雞傳染性支氣管炎（IB）</strong>：Coronaviridae，<em>血清型眾多且缺乏交叉免疫</em>，疫苗防控困難</p>
+<p><strong>新城病（ND）</strong>：Paramyxoviridae，<em>單一血清型</em>，多種毒力株（低毒→高毒）</p>
+<p><strong>傳染性喉氣管炎（ILT）</strong>：GaHV-1，特徵性包涵體：<em>嗜酸性細胞核內包涵體（Cowdry type A）</em>；直接接觸傳播，非蚊蟲媒介</p>
+<p><strong>傳染性華氏囊病（Gumboro）</strong>：Birnaviridae，破壞法氏囊，引起免疫抑制</p>
+<p><strong>禽流感（AI）</strong>：Orthomyxoviridae（分節段負義RNA），H5/H7 為高病原性</p>
+<p><strong>黃麴毒素毒性強弱</strong>：B1 &gt; G1 &gt; B2 &gt; G2</p>`,
+    compare: [
+      {
+        title: "ILT 與禽痘包涵體比較",
+        left:  { title: "ILT（GaHV-1，皰疹病毒）",  text: "嗜酸性細胞核內包涵體（Cowdry type A），位於氣管上皮細胞核內" },
+        right: { title: "禽痘（Poxvirus）",           text: "嗜酸性細胞質內包涵體（Bollinger 小體），位於細胞質內" }
+      }
+    ]
+  },
+  {
+    title: "寄生蟲蟲卵形態鑑別",
+    badge: "寄生蟲",
+    body: `<p><strong>Trichuris suis（豬鞭蟲）</strong>：橄欖形（橢圓），兩端各有透明栓塞（bipolar plugs）★ 最常考</p>
+<p><strong>Ascaris suum（豬蛔蟲）</strong>：圓/橢圓形，外層凹凸不平蛋白層（mammillated coat）</p>
+<p><strong>Cystoisospora suis（豬球蟲）</strong>：圓形卵囊（oocyst），不孢育狀態排出</p>
+<p><strong>Trichinella spp.（旋毛蟲）</strong>：胎生，<em>不排蟲卵</em>，診斷靠肌肉組織切片（幼蟲囊腫）</p>
+<p><strong>Dactylogyrus sp.</strong>：卵生，有鉤，寄生魚鰓；<strong>Gyrodactylus sp.</strong>：胎生，寄生魚體表/鰓</p>`,
+    compare: []
+  },
+  {
+    title: "病毒分類重點整理",
+    badge: "病毒學",
+    body: `<p>★ 記住哪些是 DNA 病毒，其餘通常是 RNA</p>`,
+    compare: [
+      {
+        title: "DNA vs RNA 病毒（常見考題）",
+        left:  { title: "DNA 病毒（豬/雞）",  text: "ASF（Asfarviridae）、PRV/ILT（Herpesviridae）、PCV（Circoviridae）、禽痘（Poxviridae）、IBDV（Birnaviridae，dsDNA）" },
+        right: { title: "RNA 病毒（豬/雞）",  text: "PRRS（Arteriviridae）、PEDV（Coronaviridae）、CSF/BVDV（Flaviviridae）、FMDV（Picornaviridae）、NDV（Paramyxoviridae）、AI（Orthomyxoviridae，分節段）、IBV（Coronaviridae）" }
+      },
+      {
+        title: "Pestivirus 成員比較",
+        left:  { title: "豬瘟 CSFV",   text: "感染豬科；Flaviviridae / Pestivirus 屬；與 BVDV 抗原交叉，診斷時需鑑別" },
+        right: { title: "BVDV（牛）", text: "感染牛；同屬 Pestivirus；與 CSFV 親緣最近，血清學可交叉" }
+      }
+    ]
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let mode = 0;         // 0=quiz 1=flash 2=summary
+let filterKey = 'all';
+let filtered = [];
+let cur = 0;
+let progress = {};    // id -> {chosen, correct}
+let navOpen = false;
+let fcIdx = 0;
+let fcFlipped = false;
+let multiSelected = [];
+
+const STORAGE_KEY = 'chuanran_v15';
+
+// ── INIT ──────────────────────────────────────────────────────────────
+function init() {
+  loadProgress();
+  buildYearFilter();
+  setFilter('all');
+}
+
+function loadProgress() {
+  try { const s = localStorage.getItem(STORAGE_KEY); if (s) progress = JSON.parse(s); } catch(e) { progress = {}; }
+}
+function saveProgress() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e) {}
+}
+function clearProgress() {
+  if (!confirm('確定清除所有作答記錄？')) return;
+  progress = {}; saveProgress(); renderQ(); updateStats(); buildNav();
+}
+
+// Build year/session dropdown
+function buildYearFilter() {
+  const sel = document.getElementById('yrsel');
+  const seen = new Set();
+  const opts = [];
+  QUESTIONS.forEach(q => {
+    const yr = q.roc_year || q.year;
+    const sess = q.session || '';
+    const key = sess ? yr + '_' + sess : String(yr);
+    if (!seen.has(key)) {
+      seen.add(key);
+      const label = sess ? 'ROC ' + yr + '（' + q.year + '）第' + sess + '次' : 'ROC ' + yr + '（' + q.year + '）';
+      opts.push({key, label, yr: Number(yr), sess});
+    }
+  });
+  opts.sort((a,b) => b.yr !== a.yr ? b.yr - a.yr : (b.sess > a.sess ? 1 : -1));
+  opts.forEach(o => {
+    const el = document.createElement('option');
+    el.value = o.key; el.textContent = o.label;
+    sel.appendChild(el);
+  });
+}
+
+function setFilter(val) {
+  filterKey = val;
+  filtered = val === 'all' ? QUESTIONS.slice() : QUESTIONS.filter(q => {
+    const yr = q.roc_year || q.year;
+    const sess = q.session || '';
+    const key = sess ? yr + '_' + sess : String(yr);
+    return key === val;
+  });
+  cur = 0; multiSelected = [];
+  document.getElementById('qtotal').textContent = filtered.length;
+  render();
+}
+
+// ── MODE ──────────────────────────────────────────────────────────────
+function setM(m) {
+  mode = m;
+  [0,1,2].forEach(i => document.getElementById('m'+i).classList.toggle('on', i===m));
+  document.getElementById('nav-wrap').style.display = m === 0 ? '' : 'none';
+  render();
+}
+function render() {
+  if (mode === 0)      { renderQ(); updateStats(); buildNav(); }
+  else if (mode === 1) { renderFlash(); }
+  else                 { renderSummary(); }
+}
+
+// ── QUIZ ──────────────────────────────────────────────────────────────
+function renderQ() {
+  const area = document.getElementById('area');
+  if (!filtered.length) { area.innerHTML = '<div class="card" style="text-align:center;color:var(--text3);padding:2rem">此篩選條件無題目</div>'; return; }
+  if (cur >= filtered.length) { renderResult(); return; }
+
+  const q = filtered[cur];
+  const done = progress[q.id];
+  const isMulti = Array.isArray(q.multi_answers) && q.multi_answers.length > 1;
+  const labels = ['A','B','C','D','E'];
+  const correctSet = isMulti ? new Set(q.multi_answers) : new Set([q.answer]);
+  const yr = q.roc_year || q.year;
+  const sess = q.session ? '第'+q.session+'次' : '';
+
+  // Build HTML using DOM to avoid XSS and double-escaping issues with existing HTML entities
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  // Meta
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.innerHTML = `<span class="bdg bdg-yr mono">ROC ${yr} ${sess}</span>`
+    + `<span class="bdg bdg-src mono">No.${q.examNo || cur+1}</span>`
+    + (isMulti ? '<span class="bdg bdg-multi mono">複選題</span>' : '')
+    + (q.needs_review ? '<span class="bdg bdg-rv mono">&#9888; 待確認</span>' : '')
+    + `<span class="qn mono">${cur+1}/${filtered.length}</span>`;
+  card.appendChild(meta);
+
+  // Question text (already contains HTML entities from source - use innerHTML)
+  const qt = document.createElement('div');
+  qt.className = 'qt';
+  qt.innerHTML = q.question;
+  card.appendChild(qt);
+
+  // Images
+  if (q.images && q.images.length) {
+    const imgDiv = document.createElement('div');
+    imgDiv.className = 'q-imgs';
+    q.images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src; img.alt = '題目圖片'; img.loading = 'lazy';
+      imgDiv.appendChild(img);
+    });
+    card.appendChild(imgDiv);
+  }
+
+  // Multi hint
+  if (isMulti && !done) {
+    const hint = document.createElement('div');
+    hint.className = 'multi-hint';
+    hint.textContent = '複選題：請選出所有正確答案後點擊「確認答案」';
+    card.appendChild(hint);
+  }
+
+  // Options
+  const optsDiv = document.createElement('div');
+  optsDiv.className = 'opts';
+  q.options.forEach((opt, i) => {
+    const d = document.createElement('div');
+    let cls = 'opt';
+    if (done) {
+      cls += ' dis';
+      if (correctSet.has(i)) cls += ' ok';
+      else if (isMulti ? done.chosen.includes(i) : done.chosen === i) cls += ' no';
+    } else if (isMulti) {
+      if (multiSelected.includes(i)) cls += ' sel-multi';
+      d.onclick = () => toggleMulti(i);
+    } else {
+      d.onclick = () => answer(i);
+    }
+    d.className = cls;
+    // Strip leading "A. " etc since we have the label column
+    const optText = opt.replace(/^[A-D]\.\s*/,'');
+    d.innerHTML = `<span class="okey">${labels[i]}</span><span>${optText}</span>`;
+    optsDiv.appendChild(d);
+  });
+  card.appendChild(optsDiv);
+
+  // Confirm button for multi
+  if (isMulti && !done) {
+    const btnWrap = document.createElement('div');
+    btnWrap.style.marginTop = '.7rem';
+    const btn = document.createElement('button');
+    btn.className = 'btn btnp'; btn.textContent = '確認答案';
+    btn.onclick = confirmMulti;
+    btnWrap.appendChild(btn);
+    card.appendChild(btnWrap);
+  }
+
+  // Explanation
+  if (done) {
+    const exp = document.createElement('div');
+    exp.className = 'exp show';
+    exp.innerHTML = `<div class="exp-t">解析</div>${q.explanation}`;
+    card.appendChild(exp);
+
+    // Wrong explanation
+    if (!done.correct) {
+      let wexpText = '';
+      if (isMulti) {
+        done.chosen.forEach(ci => {
+          if (!correctSet.has(ci) && q.wrongExplanations && q.wrongExplanations[ci] && q.wrongExplanations[ci].trim()) {
+            wexpText += `<p><strong>${labels[ci]}.</strong> ${q.wrongExplanations[ci]}</p>`;
+          }
+        });
+      } else {
+        const we = q.wrongExplanations && q.wrongExplanations[done.chosen];
+        if (we && we.trim()) wexpText = we;
+      }
+      if (wexpText) {
+        const wexp = document.createElement('div');
+        wexp.className = 'wexp show';
+        wexp.innerHTML = `<div class="wexp-t">你可能會選這個答案，是因為……</div>${wexpText}`;
+        card.appendChild(wexp);
+      }
+    }
+  }
+
+  // Actions
+  const act = document.createElement('div');
+  act.className = 'act';
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'btn'; prevBtn.textContent = '← 上一題';
+  prevBtn.disabled = cur === 0;
+  prevBtn.onclick = () => go(cur - 1);
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'btn btnp'; nextBtn.textContent = '下一題 →';
+  if (cur === filtered.length - 1 && !done) nextBtn.disabled = true;
+  nextBtn.onclick = () => go(cur + 1);
+  act.appendChild(prevBtn); act.appendChild(nextBtn);
+  card.appendChild(act);
+
+  area.innerHTML = '';
+  area.appendChild(card);
+  updateProgress();
+}
+
+function toggleMulti(i) {
+  const idx = multiSelected.indexOf(i);
+  if (idx === -1) multiSelected.push(i); else multiSelected.splice(idx, 1);
+  renderQ();
+}
+function confirmMulti() {
+  if (!multiSelected.length) { alert('請至少選擇一個選項'); return; }
+  const q = filtered[cur];
+  const correctSet = new Set(q.multi_answers);
+  const correct = multiSelected.length === q.multi_answers.length && multiSelected.every(i => correctSet.has(i));
+  progress[q.id] = { chosen: multiSelected.slice(), correct };
+  multiSelected = [];
+  saveProgress(); updateStats(); buildNav(); renderQ();
+}
+function answer(i) {
+  const q = filtered[cur];
+  if (progress[q.id]) return;
+  progress[q.id] = { chosen: i, correct: q.answer === i };
+  saveProgress(); updateStats(); buildNav(); renderQ();
+}
+function go(n) {
+  if (n < 0 || n > filtered.length) return;
+  cur = n; multiSelected = []; renderQ();
+}
+function updateProgress() {
+  const pct = filtered.length ? (filtered.filter(q => progress[q.id]).length / filtered.length) * 100 : 0;
+  document.getElementById('pf').style.width = pct + '%';
+}
+function updateStats() {
+  const ids = filtered.map(q => q.id);
+  const answered = ids.filter(id => progress[id]).length;
+  const correct  = ids.filter(id => progress[id] && progress[id].correct).length;
+  document.getElementById('sd').textContent = answered;
+  document.getElementById('sc').textContent = correct;
+  document.getElementById('sa').textContent = answered ? Math.round(correct/answered*100)+'%' : '—';
+  updateProgress();
+}
+function renderResult() {
+  const answered = filtered.filter(q => progress[q.id]).length;
+  const correct  = filtered.filter(q => progress[q.id] && progress[q.id].correct).length;
+  const pct = answered ? Math.round(correct/answered*100) : 0;
+  const clr = pct >= 60 ? 'grn' : 'red';
+  document.getElementById('area').innerHTML = `<div class="res card">
+    <div class="res-s ${clr} mono">${pct}%</div>
+    <div class="res-sub">已完成所有 ${filtered.length} 題</div>
+    <div class="res-row">
+      <div class="ri"><div class="rn mono">${answered}</div><div class="rl">已答</div></div>
+      <div class="ri"><div class="rn mono grn">${correct}</div><div class="rl">答對</div></div>
+      <div class="ri"><div class="rn mono red">${answered-correct}</div><div class="rl">答錯</div></div>
+    </div>
+    <button class="btn btnp" onclick="go(0)" style="margin-top:.5rem">重新作答</button>
+  </div>`;
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────
+function toggleNav() {
+  navOpen = !navOpen;
+  document.getElementById('nav-grid').classList.toggle('hidden', !navOpen);
+  document.getElementById('nav-arrow').classList.toggle('open', navOpen);
+}
+function buildNav() {
+  const grid = document.getElementById('nav-grid');
+  grid.innerHTML = '';
+  filtered.forEach((q, i) => {
+    const p = progress[q.id];
+    const btn = document.createElement('button');
+    let cls = 'qnb' + (i===cur?' cur':'') + (p ? (p.correct?' ans-ok':' ans-no') : '');
+    btn.className = cls;
+    btn.textContent = i+1;
+    btn.title = q.question.replace(/<[^>]+>/g,'').substring(0,40) + '…';
+    btn.onclick = () => { cur = i; multiSelected = []; renderQ(); buildNav(); };
+    grid.appendChild(btn);
+  });
+}
+
+// ── FLASH ─────────────────────────────────────────────────────────────
+function buildFlashcards(qs) {
+  return qs.filter(q => !q.needs_review).slice(0, 60).map(q => ({
+    id: q.id,
+    question: q.question,
+    answer: q.options[Array.isArray(q.multi_answers) ? q.multi_answers[0] : q.answer] || '',
+    explanation: q.explanation,
+    year: q.roc_year || q.year,
+    session: q.session || ''
+  }));
+}
+function renderFlash() {
+  const area = document.getElementById('area');
+  const cards = buildFlashcards(filtered);
+  if (!cards.length) { area.innerHTML = '<div class="card" style="text-align:center;color:var(--text3);padding:2rem">此篩選條件無字卡</div>'; return; }
+  if (fcIdx >= cards.length) fcIdx = 0;
+  const c = cards[fcIdx];
+  const yr = c.year ? 'ROC '+c.year+(c.session?' 第'+c.session+'次':'') : '';
+  area.innerHTML = `<div class="fc-card${fcFlipped?' flipped':''}" onclick="flipCard()">
+    <div class="fc-front">
+      ${yr?`<div class="fc-tag">${yr}</div>`:''}
+      <div class="fc-q">${c.question}</div>
+      <div class="fc-hint">點擊卡片查看答案</div>
+    </div>
+    <div class="fc-back">
+      ${yr?`<div class="fc-tag">${yr}</div>`:''}
+      <div class="fc-ans">&#10003; ${c.answer}</div>
+      <div class="fc-exp">${c.explanation}</div>
+    </div>
+  </div>
+  <div class="fc-nav">
+    <button class="btn" onclick="fcGo(-1);event.stopPropagation()">&#8592;</button>
+    <span style="font-size:12px;color:var(--text3);font-family:'Courier New',monospace">${fcIdx+1} / ${cards.length}</span>
+    <button class="btn" onclick="fcGo(1);event.stopPropagation()">&#8594;</button>
+  </div>`;
+}
+function flipCard() { fcFlipped = !fcFlipped; renderFlash(); }
+function fcGo(d) { const cards = buildFlashcards(filtered); fcIdx=(fcIdx+d+cards.length)%cards.length; fcFlipped=false; renderFlash(); }
+
+// ── SUMMARY ───────────────────────────────────────────────────────────
+function renderSummary() {
+  const area = document.getElementById('area');
+  let html = '';
+  SUMMARY_CARDS.forEach(sc => {
+    html += `<div class="sm-card"><div class="sm-title">${sc.title}<span class="sm-badge">${sc.badge}</span></div><div class="sm-body">${sc.body}`;
+    (sc.compare||[]).forEach(cmp => {
+      html += `<p style="font-size:11px;color:var(--text3);margin:.5rem 0 .25rem;text-transform:uppercase;letter-spacing:.05em;font-family:'Courier New',monospace">${cmp.title}</p>
+      <div class="sm-compare">
+        <div class="sm-col"><div class="sm-col-title">${cmp.left.title}</div>${cmp.left.text}</div>
+        <div class="sm-col"><div class="sm-col-title">${cmp.right.title}</div>${cmp.right.text}</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  area.innerHTML = html;
+}
+
+// ── BOOT ─────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
