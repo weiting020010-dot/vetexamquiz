@@ -1,4 +1,4 @@
-const CACHE = 'vetquiz-v41';
+const CACHE = 'vetquiz-v42';
 const PRECACHE = ['./','./index.html','./manifest.json','./icon-192.png','./icon-512.png'];
 const HTML_FILES = ['index.html','pathology.html','chuanran.html','yaoli.html','putongbing.html',''];
 const FIREBASE_HOST = 'www.gstatic.com';
