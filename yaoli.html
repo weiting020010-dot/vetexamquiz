@@ -567,12 +567,12 @@ function renderQ(a){
   const answered=qStates[q.id];
   const ec=errorCounts[q.id]||0;
   setProg(Math.round(state.qi/qs.length*100));
-  const noteHtml=q.note?`<div class="note-box">注意：${q.note}</div>`:'';
+  const maNote=q.ma?`<div class="note-box" style="border-color:#f0a500;color:#f0a500">📌 複選題：正確答案為 ${q.ma.map(i=>String.fromCharCode(65+i)).join(" 和 ")}，任選其一均算答對。</div>`:""; const noteHtml=q.note?`<div class="note-box">注意：${q.note}</div>`:'';
   const pickedIdx=answered&&answered.startsWith('no')?parseInt(answered.split('-')[1]):-1;
   let optsHtml=q.opts.map((o,i)=>{
     let cls='opt';let oc='';
     if(answered){
-      if(i===q.ans){cls+=' dis ok';}
+      if(q.ma?q.ma.includes(i):(i===q.ans)){cls+=' dis ok';}
       else if(i===pickedIdx){cls+=' no';oc=`onclick="peekWexp(${i})"`;}
       else{cls+=' peek';oc=`onclick="peekWexp(${i})"`;}
     }else{oc=`onclick="pick(${i},${q.ans})"`;}
@@ -615,14 +615,14 @@ function renderQ(a){
 function pick(i,ans){
   const qs=getQs();const q=qs[state.qi];
   if(!q||qStates[q.id])return;
-  const correct=(i===ans);
+  const correct=q.ma?q.ma.includes(i):(i===ans);
   state.done++;if(correct)state.cor++;
   qStates[q.id]=correct?'ok':'no-'+i;
   if(!correct)errorCounts[q.id]=(errorCounts[q.id]||0)+1;
   saveProgress();
   for(let j=0;j<q.opts.length;j++){
     const d=document.getElementById('o'+j);if(!d)continue;
-    if(j===ans){d.classList.add('dis','ok');d.removeAttribute('onclick');}
+    const isAns=q.ma?q.ma.includes(j):(j===ans);if(isAns){d.classList.add('dis','ok');d.removeAttribute('onclick');}
     else if(j===i&&!correct){d.classList.add('no');d.setAttribute('onclick','peekWexp('+j+')');}
     else{d.classList.add('peek');d.setAttribute('onclick','peekWexp('+j+')');}
   }
